@@ -1,0 +1,119 @@
+body {
+  position: relative;
+  min-height: 100vh;
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background: #4B0082;  /* fallback for old browsers */
+  background: -webkit-linear-gradient(to right, #4B0082, #330033);  /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(-45deg, #4B0082, #330033, #1A0019, #9400D3);
+  background-size: 400% 400%;
+  animation: gradient 8s ease infinite;
+  height: 100vh;
+}
+
+#root {
+  padding: 50px;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+@keyframes gradient {
+  0% {
+    background-position: 0 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0 50%;
+  }
+}
+
+.blurry-gradient2 {
+  z-index: -999999;
+  position: absolute !important;
+  top: 0;
+  left: -110px;
+  width: 500px;
+  height: 500px;
+  opacity: 0.5;
+  animation: pulse, myMove 15.5s alternate infinite;
+}
+
+
+.blurry-gradient {
+  z-index: -999999;
+  position: absolute !important;
+  bottom: 100px;
+  right: 50px;
+  width: 500px;
+  height: 500px;
+  opacity: 0.5;
+  animation: pulse, myOrbit 15s alternate infinite;
+}
+
+.main-container {
+  border-color: chartreuse;
+  padding: 33px !important;
+  border-radius: 12px;
+  border-style: double;
+  /*background: turquoise;*/
+  min-height: 536px;
+  background: #B3FFAB;  /* fallback for old browsers */
+  background: -webkit-linear-gradient(to right, #12FFF7, #B3FFAB);  /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(to right, #12FFF7, #B3FFAB); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+  filter: drop-shadow(1px 1px 20px #12FFF7);
+
+}
+
+.wallet-address {
+  font-family: monospace;
+  font-size: 14px;
+}
+
+@keyframes pulse {
+  from {
+    transform : scale(1);
+    opacity   : 0.75;
+  }
+  50% {
+    transform : scale(0.75);
+    opacity   : 0.25;
+  }
+  to {
+    transform : scale(1);
+    opacity   : 0.55;
+  }
+}
+
+
+@keyframes myOrbit {
+  from { transform: rotate(0deg) translateX(150px) rotate(0deg); }
+  to   { transform: rotate(360deg) translateX(220px) rotate(-360deg); }
+}
+
+
+@keyframes myMove {
+  from { transform: rotate(0deg) translateX(150px) rotate(0deg) scale(1, 1); }
+  to   { transform: rotate(0deg) translateX(220px) rotate(-360deg) scale(2, 0.5);  }
+}
+
+@media screen and (max-width: 1420px) {
+  .main-container {
+    margin: 0;
+    padding: 0;
+    border-radius: 0;
+  }
+  .blurry-gradient2,
+  .blurry-gradient {
+    visibility: hidden;
+    display: none;
+  }
+}
