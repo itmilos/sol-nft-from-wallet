@@ -3,18 +3,26 @@
   "private": true,
   "version": "0.0.0",
   "scripts": {
-    "dev": "vite",
+    "dev": "vite --host",
     "build": "vite build",
     "preview": "vite preview"
   },
   "dependencies": {
     "@awesomeqr/react": "^0.1.2-rc.0",
+    "@emailjs/browser": "^3.6.2",
+    "@nfteyez/sol-rayz": "^0.10.2",
+    "@solana/spl-token": "^0.2.0",
+    "@solana/web3.js": "^1.48.0",
+    "axios": "^0.27.2",
+    "framer-motion": "^6.5.1",
     "react": "^18.0.0",
+    "react-device-detect": "^2.2.2",
     "react-dom": "^18.0.0",
     "react-robohash": "^1.0.9",
+    "react-router-dom": "^6.3.0",
+    "react-select": "^5.4.0",
     "styled-components": "^5.3.5",
-    "@solana/spl-token": "^0.2.0",
-    "@solana/web3.js": "^1.47.3"
+    "zustand": "^4.0.0-rc.1"
   },
   "devDependencies": {
     "@types/react": "^18.0.0",

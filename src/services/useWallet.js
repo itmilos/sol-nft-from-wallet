@@ -1,8 +1,13 @@
-import { useState } from 'react'
+import axios from 'axios'
+import store from '../state/state'
+
+import { Connection, clusterApiUrl } from '@solana/web3.js'
+import { getParsedNftAccountsByOwner } from '@nfteyez/sol-rayz'
 
 export function useWallet() {
-    const [phantomWalletInstalled, setPhantomWalletInstalled] = useState(false)
-    const [walletAddress, setWalletAddress] = useState('')
+    const phantomWallet = store(state => state.phantomWallet)
+    const setPhantomWalletInstalled = store(state => state.setPhantomWalletInstalled)
+    const setPhantomWallet = store(state => state.setPhantomWallet)
 
     const connectPhantomWallet = async (onlyIfTrusted = true) => {
         try {
@@ -18,10 +23,7 @@ export function useWallet() {
                     await solana.connect()
 
                 console.log('WALLET', response)
-
-                const walletAddress = response.publicKey.toString()
-
-                setWalletAddress(walletAddress)
+                setPhantomWallet(response)
             } else {
                 setPhantomWalletInstalled(false)
                 // if (!onlyIfTrusted) visitPhantomWallet()
@@ -31,9 +33,43 @@ export function useWallet() {
         }
     }
 
+    const createConnection = () => new Connection(clusterApiUrl())
+
+    const getAllNftData = async () => {
+        try {
+            const nfts = await getParsedNftAccountsByOwner({
+                publicAddress: phantomWallet.publicKey,
+                connection: phantomWallet.connect,
+                serialization: true
+            })
+
+            return nfts
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    const getNftTokenData = async () => {
+        try {
+            let nftData = await getAllNftData()
+            var data = Object.keys(nftData).map((key) => nftData[key])
+            let arr = []
+
+            for (let i = 0; i < data.length; i++) {
+                console.log(data[i].data.uri)
+                let val = await axios.get(data[i].data.uri)
+                arr.push(val)
+            }
+
+            console.log('NFTS!!!', arr)
+            return arr
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
     return {
-        phantomWalletInstalled,
-        walletAddress,
-        connectPhantomWallet
+        connectPhantomWallet,
+        getNftTokenData
     }
 }
