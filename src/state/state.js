@@ -6,7 +6,13 @@ export const store = create(set => ({
     phantomWallet: null,
     setPhantomWallet: phantomWallet => set({ phantomWallet }),
     robotGenerated: null,
-    setRobotGenerated: robotGenerated => set({ robotGenerated })
+    setRobotGenerated: robotGenerated => set({ robotGenerated }),
+    generatedQRCodes: [],
+    addGeneratedQRCode: generatedQRCode => set(state => ({
+        generatedQRCodes: [ ...state.generatedQRCodes, generatedQRCode ]
+    })),
+    spinner: false,
+    setSpinner: spinner => set({ spinner })
 }))
 
 export default store

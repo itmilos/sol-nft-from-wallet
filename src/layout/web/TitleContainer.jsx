@@ -48,12 +48,6 @@ const TitleContainer = () => {
                 heading='Who are we?'
                 description='Get to know us a bit better'
             />
-        case '/about2':
-            return <AnimatedTitle
-                titleKey='t/about2'
-                heading='Who are we?'
-                description='Get to know us a bit better'
-            />
     }
 }
 

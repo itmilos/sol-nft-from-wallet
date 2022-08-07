@@ -49,22 +49,42 @@ export function useWallet() {
         }
     }
 
+    // const getNftTokenData = async () => {
+    //     try {
+    //         let nftData = await getAllNftData()
+    //         var data = Object.keys(nftData).map((key) => nftData[key])
+    //         let arr = []
+
+    //         for (let i = 0; i < data.length; i++) {
+    //             console.log(data[i].data.uri)
+    //             let val = await axios.get(data[i].data.uri)
+    //             arr.push(val)
+    //         }
+
+    //         console.log('NFTS!!!', arr)
+    //         return arr
+    //     } catch (error) {
+    //         console.log(error)
+    //     }
+    // }
+
     const getNftTokenData = async () => {
         try {
-            let nftData = await getAllNftData()
-            var data = Object.keys(nftData).map((key) => nftData[key])
-            let arr = []
+          var myHeaders = new Headers()
+          myHeaders.append('x-api-key', 'QQx9fwLpfVTua7_o')
+          
+          var requestOptions = {
+            method: 'GET',
+            headers: myHeaders,
+            redirect: 'follow'
+          }
+          
+          let result = await fetch(`https://api.shyft.to/sol/v1/nft/read_all?network=mainnet-beta&address=${phantomWallet.publicKey}`, requestOptions)
+          let parsedResult = await result.json()
 
-            for (let i = 0; i < data.length; i++) {
-                console.log(data[i].data.uri)
-                let val = await axios.get(data[i].data.uri)
-                arr.push(val)
-            }
-
-            console.log('NFTS!!!', arr)
-            return arr
+          return parsedResult.result
         } catch (error) {
-            console.log(error)
+          console.error(error)
         }
     }
 

@@ -16,6 +16,8 @@ import QRCode from '../../components/QRCode'
 
 import phantom from '../../assets/phantom.svg'
 
+import axios from 'axios'
+
 const PhantomInfo = () =>
     <LeftSide
         key='left'
@@ -86,9 +88,11 @@ const QRGenerator = ({
     QRGenerated,
     robohashURL,
     qrLink,
-    setQRLink
-}) =>
-    <WalletQR
+    setQRLink,
+    createNFT
+}) => {
+
+    return <WalletQR
         key='robot'
         initial={{ x: '100%', opacity: 0 }}
         animate={{ x: 0, opacity: 1 }}
@@ -105,14 +109,22 @@ const QRGenerator = ({
                     </> :
                     <>
                         <QRCodeContainer><QRCode text={qrLink.trim()} robohashURL={robohashURL} /></QRCodeContainer>
-                        <Button>Create NFT</Button>
+                        <Button onClick={createNFT}>Create NFT</Button>
                     </>
                 }
             </>
         }
     </WalletQR>
+}
 
-const QRNFT = ({ getNftTokenData, qrLink, setQRLink, generateQRNFT, robohashURL }) => {
+const QRNFT = ({
+    getNftTokenData,
+    qrLink,
+    setQRLink,
+    generateQRNFT,
+    robohashURL,
+    createNFT
+}) => {
     const [NFTs, setNFTs] = useState([])
     const [selectedNFT, setSelectedNFT] = useState(null)
     const [QRGenerated, setQRGenerated] = useState(false)
@@ -120,7 +132,7 @@ const QRNFT = ({ getNftTokenData, qrLink, setQRLink, generateQRNFT, robohashURL 
     const fetchNFTs = async () => {
         const data = await getNftTokenData()
 
-        console.log(data)
+        console.log('NFT DATA', data)
 
         if (data) setNFTs(data)
     }
@@ -137,10 +149,13 @@ const QRNFT = ({ getNftTokenData, qrLink, setQRLink, generateQRNFT, robohashURL 
         exit={{ x: '-100%', opacity: 0 }}
     >
         {QRGenerated ?
-            <QRCodeContainer><QRCode text={qrLink.trim()} robohashURL={robohashURL} /></QRCodeContainer> :
+        <>
+            <QRCodeContainer><QRCode text={qrLink.trim()} robohashURL={robohashURL} /></QRCodeContainer>
+            <Button onClick={createNFT}>Create NFT</Button>
+        </> :
             selectedNFT ?
                 <SelectedNFTContainer>
-                    <Item src={selectedNFT.data.image} size='big' />
+                    <Item src={selectedNFT.image_uri} size='big' />
                     <Input label='Enter QR code link' onChange={e => setQRLink(e.target.value)} />
                     <Button onClick={handleGenerateQR}>Add QR Code</Button>
                 </SelectedNFTContainer> :
@@ -149,7 +164,7 @@ const QRNFT = ({ getNftTokenData, qrLink, setQRLink, generateQRNFT, robohashURL 
                     <>
                         <Heading type='small'>Your NFT Gallery</Heading>
                         <Gallery>
-                            {NFTs?.map(NFT => <Item src={NFT.data.image} onClick={setSelectedNFT.bind(null, NFT)} />)}
+                            {NFTs?.map(NFT => <Item src={NFT.image_uri} onClick={setSelectedNFT.bind(null, NFT)} />)}
                         </Gallery>
                     </>
         }
@@ -160,6 +175,7 @@ const QRPage = () => {
     const phantomWallet = store(state => state.phantomWallet)
     const robotGenerated = store(state => state.robotGenerated)
     const setRobotGenerated = store(state => state.setRobotGenerated)
+    const setSpinner = store(state => state.setSpinner)
 
     const { connectPhantomWallet, getNftTokenData } = useWallet()
 
@@ -171,10 +187,11 @@ const QRPage = () => {
     const generateQRNFT = (nft = false) => {
         let imageLink = ''
 
-        if (nft?.data?.image) {
+        if (nft?.image_uri) {
             console.log('ENTERED', nft)
-            imageLink = nft.data.image
+            imageLink = nft.image_uri
         } else {
+            console.log(document.getElementById('robohash-container'))
             const url = document.getElementById('robohash-container').getElementsByTagName('img')[0].src
             console.log('URL', url)
             imageLink = url.split('?')[0]
@@ -209,6 +226,84 @@ const QRPage = () => {
         //     })
     }
 
+    const createNFT = () => {
+        setSpinner(true)
+        console.log('FUNC EXECUTED')
+        function b64toBlob(dataURI) {
+
+            var byteString = atob(dataURI.split(',')[1])
+            var ab = new ArrayBuffer(byteString.length)
+            var ia = new Uint8Array(ab)
+        
+            for (var i = 0; i < byteString.length; i++) {
+                ia[i] = byteString.charCodeAt(i)
+            }
+            return new Blob([ab], { type: 'image/jpeg' })
+        }
+        
+        var myTimeout = setTimeout(myGreeting, 900)
+        
+        function myGreeting() {
+            var divCollection = document.querySelectorAll('div')
+            divCollection.forEach(iterate)
+        }
+        
+        function myStopFunction() {
+            clearTimeout(myTimeout)
+        }
+        
+        const iterate = async item => {
+            try {
+                if (item.style.backgroundImage.indexOf('base64') !== -1) {
+                    var createNFTHeaders = new Headers()
+                    createNFTHeaders.append("x-api-key", "QQx9fwLpfVTua7_o")
+            
+                    var formdata = new FormData()
+                    formdata.append("network", "devnet")
+                    formdata.append("private_key", "4qerdPEVyDwPpzFNHXF4qfChb9hvXdfYr1JfXSBxXYCUFaKU5eyrK8GSfHfyJTCiKYQoxGJFMahXUHBcGL9c4Dqo")
+                    formdata.append("name", 'MRnft')
+                    formdata.append("symbol", "QRNFT")
+                    formdata.append("description", "generated by QRaftNFT")
+                    formdata.append("attributes", "[{\"trait_type\": \"speed\", \"value\": 100},\n{\"trait_type\": \"aggression\", \"value\": \"crazy\"},\n{\"trait_type\": \"energy\", \"value\": \"very high\"}]")
+                    formdata.append("external_url", qrLink)
+                    formdata.append("max_supply", "2")
+                    formdata.append("royalty", "20")
+                    formdata.append("file", b64toBlob(item.style.backgroundImage.substring(5).slice(0, -2)), "cb.jpeg")
+
+                    const { data: createNFTResponseData } = await axios({
+                        method: 'post',
+                        headers: { 'x-api-key': 'QQx9fwLpfVTua7_o' },
+                        url: 'https://api.shyft.to/sol/v1/nft/create',
+                        data: formdata
+                    })
+
+                    console.log(createNFTResponseData)
+                    
+                    const transferResponse = await axios({
+                        method: 'post',
+                        headers: { 'x-api-key': 'QQx9fwLpfVTua7_o' },
+                        url: 'https://api.shyft.to/sol/v1/nft/transfer',
+                        data: {
+                            network: 'devnet',
+                            from_address: "4qerdPEVyDwPpzFNHXF4qfChb9hvXdfYr1JfXSBxXYCUFaKU5eyrK8GSfHfyJTCiKYQoxGJFMahXUHBcGL9c4Dqo",
+                            token_address: createNFTResponseData.result.mint,
+                            to_address: phantomWallet.publicKey.toString(),
+                            transfer_authority: true
+                        }
+                    })
+
+                    console.log('RES', transferResponse)
+                    setSpinner(false)
+                }
+            } catch (error) {
+                console.log(error)
+                setSpinner(false)
+            } finally {
+                console.log('FINALLY EXECUTED')
+            }
+        }
+    }
+
     return <AnimatedPage>
         <AnimatePresence>
             {!page && <PhantomInfo />}
@@ -227,6 +322,7 @@ const QRPage = () => {
                     robohashURL={robohashURL}
                     qrLink={qrLink}
                     setQRLink={setQRLink}
+                    createNFT={createNFT}
                 />
             }
             {page === 2 &&
@@ -236,6 +332,7 @@ const QRPage = () => {
                     setQRLink={setQRLink}
                     generateQRNFT={generateQRNFT}
                     robohashURL={robohashURL}
+                    createNFT={createNFT}
                 />
             }
         </AnimatePresence>

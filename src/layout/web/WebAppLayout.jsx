@@ -12,10 +12,14 @@ import LandingPage from '../../pages/web/LandingPage'
 import ExamplePage from '../../pages/web/ExamplePage'
 import QRPage from '../../pages/web/QRPage'
 import AboutPage from '../../pages/web/AboutPage'
-import AboutPage2 from '../../pages/web/About2Page'
+import { Grid } from  'react-loader-spinner'
+import { useState } from 'react'
+
+import store from '../../state/state'
 
 const ComputerHomePage = () => {
     const location = useLocation()
+    const spinner = store(state => state.spinner)
 
     return <Container>
         <Main>
@@ -27,10 +31,19 @@ const ComputerHomePage = () => {
                         <Route path='/' element={<LandingPage />} />
                         <Route path='example' element={<ExamplePage />} />
                         <Route path='qr' element={<QRPage />} />
-                        <Route path='about' element={<AboutPage2 />} />
+                        <Route path='about' element={<AboutPage />} />
                     </Routes>
                 </Content>
             </AnimatePresence>
+            {spinner && <SpinnerBG>
+                <Grid
+                    height="250"
+                    width="250"
+                    radius="9"
+                    color='white'
+                    ariaLabel='three-dots-loading'
+                />
+            </SpinnerBG>}
         </Main>
         <SolanaLogo src={solana} />
         <BGImage src={bg} />
@@ -51,6 +64,19 @@ const Main = styled.div`
     height: 100vh;
     position: relative;
     z-index: 3;
+`
+
+const SpinnerBG = styled.div`
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    z-index: 4;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(0, 0, 0, .9);
 `
 
 const Content = styled.div`
