@@ -37,9 +37,9 @@ const ComputerHomePage = () => {
             </AnimatePresence>
             {spinner && <SpinnerBG>
                 <Grid
-                    height="250"
-                    width="250"
-                    radius="9"
+                    height='250'
+                    width='250'
+                    radius='9'
                     color='white'
                     ariaLabel='three-dots-loading'
                 />

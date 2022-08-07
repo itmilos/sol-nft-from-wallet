@@ -1,7 +1,7 @@
 import styled from 'styled-components'
 
-const Input = ({ label, onChange }) =>
-    <Container>
+const Input = ({ label, onChange, fullWidth, marginBottom }) =>
+    <Container fullWidth={fullWidth} marginBottom={marginBottom}>
         <StyledLabel>{label}</StyledLabel>
         <StyledInput onChange={onChange} />
     </Container>
@@ -9,6 +9,13 @@ const Input = ({ label, onChange }) =>
 const Container = styled.div`
     width: 60%;
     padding: 0 20%;
+
+    ${({ fullWidth }) => fullWidth && `
+        width: 100%;
+        padding: 0;
+    `}
+
+    ${({ marginBottom }) => marginBottom && `margin-bottom: ${marginBottom};`}
 `
 
 const StyledLabel = styled.label`
@@ -22,6 +29,7 @@ const StyledLabel = styled.label`
 const StyledInput = styled.input`
     width: 100%;
     height: 36px;
+    box-sizing: border-box;
     border-radius: 10px;
     border: none;
     outline: none;

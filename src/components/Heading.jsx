@@ -1,7 +1,8 @@
 import styled from 'styled-components'
 
 const Heading = ({ type, marginBottom, children }) => type === 'small' ?
-    <SmallHeading marginBottom={marginBottom}>{children}</SmallHeading> :
+    <SmallHeading marginBottom={marginBottom}>{children}</SmallHeading> : type === 'smallest' ?
+    <SmallestHeading marginBottom={marginBottom}>{children}</SmallestHeading> :
     <BigHeading marginBottom={marginBottom}>{children}</BigHeading>
 
 const commonHeadingProps = `
@@ -25,6 +26,17 @@ const SmallHeading = styled.h2`
     line-height: 40px;
     font-size: 32px;
     letter-spacing: -2px;
+    color: white;
+    margin: 0;
+
+    ${({ marginBottom }) => marginBottom && `margin-bottom: ${marginBottom}`}
+`
+
+const SmallestHeading = styled.h3`
+    ${commonHeadingProps}
+    line-height: 24px;
+    font-size: 16px;
+    letter-spacing: -1px;
     color: white;
     margin: 0;
 

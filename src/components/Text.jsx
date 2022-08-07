@@ -28,6 +28,11 @@ const StyledParagraph = styled.p`
         font-size: 16px;
     `}
 
+    ${props => props.size === 'small' && `
+        line-height: 16px;
+        font-size: 12px;
+    `}
+
     ${({ bold }) => bold && 'font-weight: bold;'}
     ${({ justify }) => justify && `
         text-align: justify;
