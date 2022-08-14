@@ -275,6 +275,10 @@ const QRPage = () => {
 
                     console.log('RES', transferResponse)
                     setSpinner(false)
+                    setPage(5)
+                    setTimeout(function () {
+                        setPage(1)
+                    },1200)
                 }
             } catch (error) {
                 console.log(error)
@@ -287,6 +291,11 @@ const QRPage = () => {
 
     return <AnimatedPage>
         <AnimatePresence>
+            {page === 5 &&
+                <div style={{ width: '100%', backgroundColor: '#58bd58', padding: '20px', margin: '20px', color: '#fff', borderRadius: '5px'}}>
+                    You have successfully minted QRNFT
+                </div>
+            }
             {!page && <PhantomInfo />}
             <Menu
                 phantomWallet={phantomWallet}

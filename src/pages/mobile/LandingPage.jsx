@@ -9,15 +9,6 @@ const LandingPage = () => {
     const { connectPhantomWallet } = useWallet()
 
     return <Container>
-        <Heading type='small'>
-            Welcome Solana
-        </Heading>
-        <Heading
-            type='small'
-            marginBottom='20px'
-        >
-            HH Krakow
-        </Heading>
         <Text
             size='medium'
             marginBottom='15px'
