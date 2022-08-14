@@ -28,7 +28,7 @@ const TitleContainer = () => {
             return <AnimatedTitle
                 titleKey='t/'
                 heading='Welcome'
-                description='Greetings Solana Hacker House Paris!'
+                description=''
             />
         case '/example':
             return <AnimatedTitle
